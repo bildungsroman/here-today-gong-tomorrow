@@ -28,9 +28,9 @@ Resources:
       FunctionName: !Sub ${AWS::StackName}-function7A7F1837
       Description: !Sub
         - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
-        - ResourceName: handleWebhook
-      CodeUri: src/handleWebhook
-      Handler: index.githubWebhookHandler
+        - ResourceName: handleGong
+      CodeUri: src/handleGong
+      Handler: index.gongHandler
       Runtime: nodejs8.10
       MemorySize: 3008
       Timeout: 30
@@ -48,7 +48,7 @@ Resources:
         Variables:
           GITHUB_WEBHOOK_SECRET: !Ref StackeryEnvConfiggithubSecretAsString
     Metadata:
-      StackeryName: handleWebhook
+      StackeryName: handleGong
 Parameters:
   StackeryStackTagName:
     Type: String
