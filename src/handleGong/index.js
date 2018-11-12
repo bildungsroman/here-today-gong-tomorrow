@@ -59,7 +59,7 @@ exports.gongHandler = async event => {
     channel: "#gong-test",
     username: "gongbot",
     icon_emoji: ":bell:",
-    text: 'It\'s time to celebrate!  <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/8nBOF5sJrSE?start=11" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+    text: 'It\'s time to celebrate!  https://youtu.be/8nBOF5sJrSE?t=11'
   }, function(err, response) {
     console.log(response);
     if (err) {
