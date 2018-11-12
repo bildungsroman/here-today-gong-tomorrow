@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const request = require('request');
 // This function will validate your payload from GitHub
 // See docs at https://developer.github.com/webhooks/securing/#validating-payloads-from-github
 function signRequestBody(key, body) {
@@ -42,14 +43,25 @@ exports.gongHandler = async event => {
     };
   }
 
-  // print some messages to the CloudWatch console
+  // if the event is an 'update' event, gong the Slack channel!
+
+  request.post(
+    process.env.SLACK_WEBHOOK_URL,
+    { json: { message: 'testing' } },
+    function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(body)
+        }
+    }
+  );
+
+
+  // print some messages to the CloudWatch console (for testing)
   console.log('---------------------------------');
   console.log(`\nGithub-Event: "${githubEvent}" on this repo: "${repo}" at the url: ${url}.\n ${message}`);
   console.log('Contents of event.body below:');
   console.log(event.body);
   console.log('---------------------------------');
-
-  // more advanced logic can go here
   
   // return a 200 response if the GitHub tokens match
   const response = {
