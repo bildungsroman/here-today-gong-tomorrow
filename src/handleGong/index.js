@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const request = require('request');
+const Slack = require('slack-node');
 // This function will validate your payload from GitHub
 // See docs at https://developer.github.com/webhooks/securing/#validating-payloads-from-github
 function signRequestBody(key, body) {
@@ -44,16 +44,39 @@ exports.gongHandler = async event => {
   }
 
   // if the event is an 'update' event, gong the Slack channel!
-  const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
-  const text = '(test)!';
-  request.post(
-    {
-      headers : { 'Content-type' : 'application/json' },
-      slackWebhookUrl,
-      form : {payload: JSON.stringify({ text } )}
-    },
-    (error, res, body) => console.log(error, body, res.statusCode)
-  );
+  // const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
+  const webhookUri = process.env.SLACK_WEBHOOK_URL;
+
+  slack = new Slack();
+  slack.setWebhook(webhookUri);
+
+  // slack emoji
+  slack.webhook({
+    channel: "#gong-test",
+    username: "gongbot",
+    icon_emoji: ":bell:",
+    text: "test message, test message"
+  }, function(err, response) {
+    console.log(response);
+    if (err) {
+      console.log('something went wrong');
+      console.log(err);
+    }
+  });
+
+  // send video URL
+  slack.webhook({
+    channel: "#gong-test",
+    username: "gongbot",
+    link: "http://icons.iconarchive.com/icons/rokey/popo-emotions/128/after-boom-icon.png",
+    text: "gongs away!"
+  }, function(err, response) {
+    console.log(response);
+    if (err) {
+      console.log('something went wrong');
+      console.log(err);
+    }
+  });
 
 
   // print some messages to the CloudWatch console (for testing)
