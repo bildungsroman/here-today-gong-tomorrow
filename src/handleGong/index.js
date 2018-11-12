@@ -16,9 +16,13 @@ exports.gongHandler = async event => {
   const sig = headers['X-Hub-Signature'];
   const githubEvent = headers['X-GitHub-Event'];
   const body = JSON.parse(event.body);
-  // this determines username for a push event, but lists the repo owner for other events
-  const username = body.pusher ? body.pusher.name : body.repository.owner.login;
-  const message = body.pusher ? `${username} pushed this awesomeness/atrocity through (delete as necessary)` : `The repo owner is ${username}.`
+  // set variables for a release event
+  let releaseVersion, releaseUrl, author = null;
+  if (githubEvent === 'published') {
+    releaseVersion = body.release.tag_name;
+    releaseUrl = body.release.html_url;
+    author = body.release.author.login;
+  }
   // get repo variables
   const { repository } = body;
   const repo = repository.full_name;
@@ -47,41 +51,31 @@ exports.gongHandler = async event => {
   // const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
   const webhookUri = process.env.SLACK_WEBHOOK_URL;
 
-  slack = new Slack();
+  const slack = new Slack();
   slack.setWebhook(webhookUri);
 
-  // slack emoji
+  // send slack message
   slack.webhook({
     channel: "#gong-test",
     username: "gongbot",
     icon_emoji: ":bell:",
-    text: "test message, test message"
+    text: 'It\'s time to celebrate!  <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/8nBOF5sJrSE?start=11" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
   }, function(err, response) {
     console.log(response);
     if (err) {
-      console.log('something went wrong');
+      console.log('Something went wrong');
       console.log(err);
     }
   });
-
-  // send video URL
-  slack.webhook({
-    channel: "#gong-test",
-    username: "gongbot",
-    link: "http://icons.iconarchive.com/icons/rokey/popo-emotions/128/after-boom-icon.png",
-    text: "gongs away!"
-  }, function(err, response) {
-    console.log(response);
-    if (err) {
-      console.log('something went wrong');
-      console.log(err);
-    }
-  });
-
+  
+  if (githubEvent === 'published') {
+    console.log('Release event! Bring on the gong!')
+    console.log(`${author} pushed release version ${releaseVersion}. See it here: ${releaseUrl}!`)
+  }
 
   // print some messages to the CloudWatch console (for testing)
   console.log('---------------------------------');
-  console.log(`\nGithub-Event: "${githubEvent}" on this repo: "${repo}" at the url: ${url}.\n ${message}`);
+  console.log(`\nGithub-Event: "${githubEvent}" on this repo: "${repo}" at the url: ${url}.`);
   console.log('Contents of event.body below:');
   console.log(event.body);
   console.log('---------------------------------');
