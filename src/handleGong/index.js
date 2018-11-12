@@ -44,12 +44,12 @@ exports.gongHandler = async event => {
   }
 
   // if the event is an 'update' event, gong the Slack channel!
-  const url = process.env.SLACK_WEBHOOK_URL;
+  const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
   const text = '(test)!';
   request.post(
     {
       headers : { 'Content-type' : 'application/json' },
-      url,
+      slackWebhookUrl,
       form : {payload: JSON.stringify({ text } )}
     },
     (error, res, body) => console.log(error, body, res.statusCode)
