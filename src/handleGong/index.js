@@ -1,11 +1,11 @@
 const crypto = require('crypto');
 const Slack = require('slack-node');
-// This function will validate your payload from GitHub
-// See docs at https://developer.github.com/webhooks/securing/#validating-payloads-from-github
+
+// validate your payload from GitHub
 function signRequestBody(key, body) {
   return `sha1=${crypto.createHmac('sha1', key).update(body, 'utf-8').digest('hex')}`;
 }
-// The webhook handler function
+// webhook handler function
 exports.gongHandler = async event => {
   // get the GitHub secret from the environment variables
   const token = process.env.GITHUB_WEBHOOK_SECRET;
@@ -48,7 +48,6 @@ exports.gongHandler = async event => {
   }
 
   // if the event is an 'update' event, gong the Slack channel!
-  // const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
   const webhookUri = process.env.SLACK_WEBHOOK_URL;
 
   const slack = new Slack();
@@ -56,10 +55,10 @@ exports.gongHandler = async event => {
 
   // send slack message
   slack.webhook({
-    channel: "#gong-test",
+    channel: "#gong-test", // your desired channel here
     username: "gongbot",
-    icon_emoji: ":bell:",
-    text: 'It\'s time to celebrate!  https://youtu.be/8nBOF5sJrSE?t=11'
+    icon_emoji: ":gong:", // because Slack is for emojis
+    text: 'It\'s time to celebrate! :gong:  https://youtu.be/8nBOF5sJrSE?t=11' // your message
   }, function(err, response) {
     console.log(response);
     if (err) {
@@ -67,8 +66,21 @@ exports.gongHandler = async event => {
       console.log(err);
     }
   });
+
   
-  if (githubEvent === 'published') {
+  if (githubEvent === 'release') {
+    slack.webhook({
+      channel: "#gong-test", // your desired channel here
+      username: "gongbot",
+      icon_emoji: ":gong:", // because Slack is for emojis
+      text: `${author} pushed release version ${releaseVersion}. See it here: ${releaseUrl}!. It's time to celebrate! :gong:  https://youtu.be/8nBOF5sJrSE?t=11` // your message
+    }, function(err, response) {
+      console.log(response);
+      if (err) {
+        console.log('Something went wrong');
+        console.log(err);
+      }
+    });
     console.log('Release event! Bring on the gong!')
     console.log(`${author} pushed release version ${releaseVersion}. See it here: ${releaseUrl}!`)
   }
