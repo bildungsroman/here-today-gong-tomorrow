@@ -63,10 +63,12 @@ exports.gongHandler = async event => {
       json: true,
       body: githubBody
   }, function (error, response, body){
+    console.log('sending to Slack');
     if (!error && response.statusCode == 200) {
-        console.log('body');
+        console.log('body sent');
         console.log(body);
       } else {
+        console.log('error found');
         console.log(error);
       }
   });
