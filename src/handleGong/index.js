@@ -56,7 +56,7 @@ exports.gongHandler = async event => {
   //   }
   // );
 
-  const githubBody = { 'message': 'testing' };
+  const githubBody = '{"text":"Hello, World!"}';
   request({
       url: process.env.SLACK_WEBHOOK_URL,
       method: 'POST',
