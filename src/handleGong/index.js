@@ -16,17 +16,17 @@ exports.gongHandler = async event => {
   const sig = headers['X-Hub-Signature'];
   const githubEvent = headers['X-GitHub-Event'];
   const body = JSON.parse(event.body);
+  // get repo variables
+  const { repository, release } = body;
+  const repo = repository.full_name;
+  const url = repository.url;
   // set variables for a release event
   let releaseVersion, releaseUrl, author = null;
   if (githubEvent === 'published') {
-    releaseVersion = body.release.tag_name;
-    releaseUrl = body.release.html_url;
-    author = body.release.author.login;
+    releaseVersion = release.tag_name;
+    releaseUrl = release.html_url;
+    author = release.author.login;
   }
-  // get repo variables
-  const { repository } = body;
-  const repo = repository.full_name;
-  const url = repository.url;
   
   // check that a GitHub webhook secret variable exists, if not, return an error
   if (typeof token !== 'string') {
@@ -47,18 +47,17 @@ exports.gongHandler = async event => {
     };
   }
 
-  // if the event is an 'update' event, gong the Slack channel!
+  // if the event is a 'release' event, gong the Slack channel!
   const webhookUri = process.env.SLACK_WEBHOOK_URL;
 
   const slack = new Slack();
   slack.setWebhook(webhookUri);
 
-  // send slack message
+  // send slack message for testing
   slack.webhook({
     channel: "#gong-test", // your desired channel here
     username: "gongbot",
-    icon_emoji: ":gong:", // because Slack is for emojis
-    text: 'It\'s time to celebrate! :gong:  https://youtu.be/8nBOF5sJrSE?t=11' // your message
+    text: 'Nothing to see here, just a ping' // your message
   }, function(err, response) {
     console.log(response);
     if (err) {
@@ -67,13 +66,14 @@ exports.gongHandler = async event => {
     }
   });
 
-  
+  // send slack message
   if (githubEvent === 'release') {
     slack.webhook({
       channel: "#gong-test", // your desired channel here
       username: "gongbot",
       icon_emoji: ":gong:", // because Slack is for emojis
-      text: `${author} pushed release version ${releaseVersion}. See it here: ${releaseUrl}!. It's time to celebrate! :gong:  https://youtu.be/8nBOF5sJrSE?t=11` // your message
+      text: `${author} pushed release version ${releaseVersion}. See it here: ${releaseUrl}!. It's time to celebrat
+      e! :gong:  https://youtu.be/8nBOF5sJrSE?t=11` // your message
     }, function(err, response) {
       console.log(response);
       if (err) {
