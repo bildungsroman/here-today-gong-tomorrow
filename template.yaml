@@ -47,6 +47,7 @@ Resources:
       Environment:
         Variables:
           GITHUB_WEBHOOK_SECRET: !Ref StackeryEnvConfiggithubSecretAsString
+          SLACK_WEBHOOK_URL: !Ref StackeryEnvConfigslackWebhookURLAsString
     Metadata:
       StackeryName: handleGong
 Parameters:
@@ -62,6 +63,10 @@ Parameters:
   StackeryEnvConfiggithubSecretAsString:
     Type: AWS::SSM::Parameter::Value<String>
     Default: /Stackery/Environments/<StackeryEnvId>/Config/githubSecret
+  StackeryEnvConfigslackWebhookURLAsString:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /Stackery/Environments/<StackeryEnvId>/Config/slackWebhookURL
 Metadata:
   StackeryEnvConfigParameters:
     StackeryEnvConfiggithubSecretAsString: githubSecret
+    StackeryEnvConfigslackWebhookURLAsString: slackWebhookURL
