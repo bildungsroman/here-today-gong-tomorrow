@@ -59,7 +59,7 @@ exports.gongHandler = async event => {
       channel: "#gong-test", // your desired channel here
       username: "gongbot",
       icon_emoji: ":gong:", // because Slack is for emojis
-      text: `It's time to celebrate! ${author} pushed release version ${releaseVersion}. See it here: ${releaseUrl}!\n:gong:  https://youtu.be/8nBOF5sJrSE?t=11` // your message
+      text: `It's time to celebrate! ${author} pushed release version ${releaseVersion}. See it here: ${releaseUrl}!\n:gong:  https://youtu.be/8nBOF5sJrSE?t=7` // your message
     }, function(err, response) {
       console.log(response);
       if (err) {
