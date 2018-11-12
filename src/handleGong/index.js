@@ -59,8 +59,7 @@ exports.gongHandler = async event => {
       channel: "#gong-test", // your desired channel here
       username: "gongbot",
       icon_emoji: ":gong:", // because Slack is for emojis
-      text: `${author} pushed release version ${releaseVersion}. See it here: ${releaseUrl}!.\n It's time to celebrat
-      e! :gong:  https://youtu.be/8nBOF5sJrSE?t=11` // your message
+      text: `It's time to celebrate! ${author} pushed release version ${releaseVersion}. See it here: ${releaseUrl}!\n:gong:  https://youtu.be/8nBOF5sJrSE?t=11` // your message
     }, function(err, response) {
       console.log(response);
       if (err) {
@@ -68,14 +67,11 @@ exports.gongHandler = async event => {
         console.log(err);
       }
     });
-    console.log('Release event! Bring on the gong!')
-    console.log(`${author} pushed release version ${releaseVersion}. See it here: ${releaseUrl}!`)
   }
 
-  // print some messages to the CloudWatch console (for testing)
+  // (optional) print some messages to the CloudWatch console (for testing)
   console.log('---------------------------------');
   console.log(`\nGithub-Event: "${githubEvent}" on this repo: "${repo}" at the url: ${url}.`);
-  console.log('Contents of event.body below:');
   console.log(event.body);
   console.log('---------------------------------');
   
