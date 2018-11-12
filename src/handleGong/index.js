@@ -22,7 +22,7 @@ exports.gongHandler = async event => {
   const url = repository.url;
   // set variables for a release event
   let releaseVersion, releaseUrl, author = null;
-  if (githubEvent === 'published') {
+  if (githubEvent === 'release') {
     releaseVersion = release.tag_name;
     releaseUrl = release.html_url;
     author = release.author.login;
@@ -52,19 +52,6 @@ exports.gongHandler = async event => {
 
   const slack = new Slack();
   slack.setWebhook(webhookUri);
-
-  // send slack message for testing
-  slack.webhook({
-    channel: "#gong-test", // your desired channel here
-    username: "gongbot",
-    text: 'Nothing to see here, just a ping' // your message
-  }, function(err, response) {
-    console.log(response);
-    if (err) {
-      console.log('Something went wrong');
-      console.log(err);
-    }
-  });
 
   // send slack message
   if (githubEvent === 'release') {
