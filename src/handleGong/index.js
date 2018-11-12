@@ -50,10 +50,26 @@ exports.gongHandler = async event => {
     { json: { message: 'testing' } },
     function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            console.log(body)
+            console.log('body');
+            console.log(body);
         }
     }
   );
+
+  // const githubBody = { message: 'testing' };
+  // request({
+  //     url: process.env.SLACK_WEBHOOK_URL,
+  //     method: 'POST',
+  //     json: true,
+  //     body: githubBody
+  // }, function (error, response, body){
+  //   if (!error && response.statusCode == 200) {
+  //       console.log('body');
+  //       console.log(body);
+  //     } else {
+  //       console.log(error);
+  //     }
+  // });
 
 
   // print some messages to the CloudWatch console (for testing)
