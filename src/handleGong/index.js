@@ -44,34 +44,37 @@ exports.gongHandler = async event => {
   }
 
   // if the event is an 'update' event, gong the Slack channel!
-
-  // request.post(
-  //   process.env.SLACK_WEBHOOK_URL,
-  //   { json: { message: 'testing' } },
-  //   function (error, response, body) {
-  //       if (!error && response.statusCode == 200) {
-  //           console.log('body');
-  //           console.log(body);
-  //       }
-  //   }
-  // );
-
-  const githubBody = '{"text":"Hello, World!"}';
-  request({
-      url: process.env.SLACK_WEBHOOK_URL,
-      method: 'POST',
-      json: true,
-      body: githubBody
-  }, function (error, response, body){
-    console.log('sending to Slack');
-    if (!error && response.statusCode == 200) {
-        console.log('body sent');
-        console.log(body);
+  request.post(
+    process.env.SLACK_WEBHOOK_URL,
+    { json: { message: 'testing' } },
+    function (error, response, body) {
+      console.log('sending to Slack');
+      if (!error && response.statusCode == 200) {
+          console.log('body');
+          console.log(body);
       } else {
         console.log('error found');
         console.log(error);
       }
-  });
+    }
+  );
+
+  // const githubBody = '{"text":"Hello, World!"}';
+  // request({
+  //     url: process.env.SLACK_WEBHOOK_URL,
+  //     method: 'POST',
+  //     json: true,
+  //     body: githubBody
+  // }, function (error, response, body){
+  //   console.log('sending to Slack');
+  //   if (!error && response.statusCode == 200) {
+  //       console.log('body sent');
+  //       console.log(body);
+  //     } else {
+  //       console.log('error found');
+  //       console.log(error);
+  //     }
+  // });
 
 
   // print some messages to the CloudWatch console (for testing)
