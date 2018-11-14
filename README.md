@@ -1,8 +1,6 @@
 # Serverless Webhooks App
 
-This is the repository for the [Serverless Webhooks Tutorial](https://docs.stackery.io/docs/tutorials/serverless-webhooks/) from Stackery.
-
-This tutorial will teach you to connect a GitHub webhook to a serverless function that responds to your GitHub activity.
+This is a modification of the [Serverless Webhooks Tutorial](https://docs.stackery.io/docs/tutorials/serverless-webhooks/) from Stackery.
 
 ## Deploy this to your AWS account
 
