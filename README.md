@@ -1,6 +1,11 @@
-# Serverless Webhooks App
+# The Serverless Gong! 🔔
 
-This is a modification of the [Serverless Webhooks Tutorial](https://docs.stackery.io/docs/tutorials/serverless-webhooks/) from Stackery.
+A serverless gong using GitHub and Slack webhooks. When a selected repository in GitHub has a release event, a chosen Slack channel is messaged with a gong!
+
+## Links
+
+* Read the [Serverless Webhooks Tutorial](https://docs.stackery.io/docs/tutorials/serverless-webhooks/) to get started
+* Read the [blog post on the serverless gong](https://www.stackery.io/blog/serverless-gong/) for more on this project
 
 ## Deploy this to your AWS account
 
