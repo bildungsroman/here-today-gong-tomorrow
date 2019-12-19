@@ -1,7 +1,35 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Resources:
-  api64F04294:
+  handleGong:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-handleGong
+      Description: !Sub
+        - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
+        - ResourceName: handleGong
+      CodeUri: src/handleGong
+      Handler: index.handler
+      Runtime: nodejs12.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+      Events:
+        API:
+          Type: Api
+          Properties:
+            Path: /webhook
+            Method: POST
+            RestApiId: !Ref API
+      Environment:
+        Variables:
+          GITHUB_WEBHOOK_SECRET: !Ref StackeryEnvConfiggithubSecretAsString
+          SLACK_WEBHOOK_URL: !Ref StackeryEnvConfigslackWebhookURLAsString
+    Metadata:
+      StackeryName: handleGong
+  API:
     Type: AWS::Serverless::Api
     Properties:
       Name: !Sub
@@ -17,39 +45,11 @@ Resources:
               x-amazon-apigateway-integration:
                 httpMethod: POST
                 type: aws_proxy
-                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${function7A7F1837.Arn}/invocations
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${handleGong.Arn}/invocations
               responses: {}
       EndpointConfiguration: REGIONAL
     Metadata:
       StackeryName: listenForWebhook
-  function7A7F1837:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${AWS::StackName}-function7A7F1837
-      Description: !Sub
-        - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
-        - ResourceName: handleGong
-      CodeUri: src/handleGong
-      Handler: index.gongHandler
-      Runtime: nodejs8.10
-      MemorySize: 3008
-      Timeout: 30
-      Tracing: Active
-      Policies:
-        - AWSXrayWriteOnlyAccess
-      Events:
-        api64F04294:
-          Type: Api
-          Properties:
-            Path: /webhook
-            Method: POST
-            RestApiId: !Ref api64F04294
-      Environment:
-        Variables:
-          GITHUB_WEBHOOK_SECRET: !Ref StackeryEnvConfiggithubSecretAsString
-          SLACK_WEBHOOK_URL: !Ref StackeryEnvConfigslackWebhookURLAsString
-    Metadata:
-      StackeryName: handleGong
 Parameters:
   StackeryStackTagName:
     Type: String
@@ -62,11 +62,11 @@ Parameters:
     Description: Environment name used for API Gateway Stage names (injected by Stackery at deployment time)
   StackeryEnvConfiggithubSecretAsString:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /Stackery/Environments/<StackeryEnvId>/Config/githubSecret
+    Default: /<EnvironmentName>/githubSecret
   StackeryEnvConfigslackWebhookURLAsString:
     Type: AWS::SSM::Parameter::Value<String>
-    Default: /Stackery/Environments/<StackeryEnvId>/Config/slackWebhookURL
+    Default: /<EnvironmentName>/slackWebhookURL
 Metadata:
-  StackeryEnvConfigParameters:
+  EnvConfigParameters:
     StackeryEnvConfiggithubSecretAsString: githubSecret
     StackeryEnvConfigslackWebhookURLAsString: slackWebhookURL
