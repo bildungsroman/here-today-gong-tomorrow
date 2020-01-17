@@ -6,7 +6,7 @@ function signRequestBody(key, body) {
   return `sha1=${crypto.createHmac('sha1', key).update(body, 'utf-8').digest('hex')}`;
 }
 // webhook handler function
-exports.gongHandler = async event => {
+exports.handler = async event => {
   // get the GitHub secret from the environment variables
   const token = process.env.GITHUB_WEBHOOK_SECRET;
   const calculatedSig = signRequestBody(token, event.body);
