@@ -1,0 +1,7 @@
+# package directories
+node_modules
+
+# local build directories
+.stackery
+.aws-sam
+.stackery-template.yaml
